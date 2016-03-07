@@ -32,6 +32,17 @@ objects:
         insecureEdgeTerminationPolicy: "Allow"
   -
     apiVersion: "v1"
+    kind: "PersistentVolumeClaim"
+    metadata:
+      name: "nagios-claim-1"
+    spec:
+      accessModes:
+      - "ReadWriteOnce"
+      resources:
+        requests:
+          storage: "1Gi"
+  -
+    apiVersion: "v1"
     kind: "DeploymentConfig"
     metadata:
       labels:
@@ -80,9 +91,13 @@ objects:
               value: "${NAGIOS_USER}"
             - name: "NAGIOS_PASSWORD"
               value: "${NAGIOS_PASSWORD}"
+            volumeMounts:
+              - mountPath: "/var/log/nagios"
+                name: "nagios-data-volume"
           volumes:
-            - emptyDir:
-              name: "nagios-poc-data"
+          - name: "nagios-data-volume"
+            persistentVolumeClaim:
+              claimName: "nagios-claim-1"
 parameters:
 -
   description: "Nagios hostname to expose a route as"
