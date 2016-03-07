@@ -1,0 +1,76 @@
+# Check that a component responds to a /sys/info/ping over HTTP
+define command {
+       command_name   check_fh_component_http_ping
+       command_line   $USER1$/check_http -H $ARG1$ -u /sys/info/ping -p 8080
+}
+
+# Check that a component responds to a /sys/info/health over HTTP
+define command {
+       command_name   check_fh_component_http_health
+       command_line   $USER1$/check_http -H $ARG1$ -u /sys/info/health -p 8080
+}
+
+define command {
+       command_name   check_nagios_host
+       command_line   $USER1$/check_http -H $HOSTADDRESS$ -S
+}
+
+define contact {
+       contact_name   mbaasadmin
+       use            generic-contact
+       alias          MBaaS Admin
+       email          {{ mbaas_admin_email }}
+}
+
+define contactgroup {
+       contactgroup_name  mbaasadmins
+       alias              MBaaS Administrators
+       members            mbaasadmin
+}
+
+# Host template
+define host {
+	name				fh-component-container
+	use				generic-host
+	check_period			24x7
+	check_interval		5
+	retry_interval		1
+	max_check_attempts		10
+       check_command           	check_nagios_host
+	notification_period		workhours
+	notification_interval	120
+	notification_options		d,u,r
+	contact_groups		mbaasadmins
+	register			0
+}
+
+# This is a dummy host really, just so the host doesn't go red
+define host {
+       use fh-component-container
+       address {{ mbaas_router_dns }}
+       host_name {{ mbaas_router_dns }}
+}
+
+{% for fhservice in fh_services_ping %}
+define service {
+       service_description {{ fhservice }}::Ping
+       hosts {{ mbaas_router_dns }}
+       check_command check_fh_component_http_ping!{{ fhservice }}-service
+       use generic-service
+
+       notes This server cannot access {{ fhservice }}, check it is running and that this server is able to talk to it on port 8080
+       contact_groups mbaasadmins
+}
+{% endfor %}
+
+{% for fhservice in fh_services_health %}
+define service {
+       service_description {{ fhservice }}::Health
+       hosts {{ mbaas_router_dns }}
+       check_command check_fh_component_http_health!{{ fhservice }}-service
+       use generic-service
+
+       notes This server failed to get a successful response from the {{ fhservice }} health endpoint. Check the response code & body and ensure the service and its dependencies are running and configured correctly.
+       contact_groups mbaasadmins
+}
+{% endfor %}
