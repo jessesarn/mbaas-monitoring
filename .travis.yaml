@@ -1,0 +1,18 @@
+sudo: required
+
+language: bash
+
+services:
+  - docker
+
+before_install:
+  - export REPO=rhmap/nagios
+  - export VERSION=4.0.8
+  - export BUILD=2
+  - docker build -f Dockerfile -t "$REPO:$VERSION-$BUILD" .
+
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export TAG=latest
+  - docker tag "$REPO:$VERSION-$BUILD" $REPO:$TAG
+  - docker push $REPO
