@@ -2,6 +2,8 @@ FROM centos:centos7
 
 EXPOSE 8080
 
+ADD sendEmail-epel-7.repo /etc/yum.repos.d/
+
 RUN yum install -y epel-release && \
     yum -y --setopt=tsflags=nodocs update && \
     yum -y --setopt=tsflags=nodocs install httpd \
@@ -10,6 +12,7 @@ RUN yum install -y epel-release && \
                                            supervisor \
                                            python-jinja2 \
                                            nagios-plugins-all \
+                                           sendEmail \
                                            perl-Net-SSLeay \
                                            perl-IO-Socket-SSL && \
     yum clean all && \
@@ -27,7 +30,6 @@ ADD make-nagios-fhservices-cfg.py /opt/rhmap/make-nagios-fhservices-cfg.py
 ADD make-nagios-commands-cfg.py /opt/rhmap/make-nagios-commands-cfg.py
 ADD fhservices.cfg.j2 /opt/rhmap/fhservices.cfg.j2
 ADD commands.cfg.j2 /opt/rhmap/commands.cfg.j2
-ADD sendEmail-v1.56/sendEmail /usr/local/bin/sendEmail
 
 ADD start.sh start.sh
 CMD ["./start.sh"]

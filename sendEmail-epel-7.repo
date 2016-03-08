@@ -1,0 +1,8 @@
+[galileo-sendEmail]
+name=Copr repo for sendEmail owned by galileo
+baseurl=https://copr-be.cloud.fedoraproject.org/results/galileo/sendEmail/epel-7-$basearch/
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/galileo/sendEmail/pubkey.gpg
+enabled=1
+enabled_metadata=1
