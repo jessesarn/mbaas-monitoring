@@ -1,17 +1,17 @@
 apiVersion: "v1"
 kind: "Template"
 metadata:
-  name: nagios-poc-template
+  name: nagios-template
 objects:
   -
     apiVersion: "v1"
     kind: "Service"
     metadata:
-      name: "nagios-poc"
+      name: "nagios"
     spec:
       selector:
         provider: "rhmap"
-        component: "nagios-poc"
+        component: "nagios"
       ports:
         -
           protocol: "TCP"
@@ -21,12 +21,12 @@ objects:
     apiVersion: "v1"
     kind: "Route"
     metadata:
-      name: "nagios-poc"
+      name: "nagios"
     spec:
       host: "${NAGIOS_HOST}"
       to:
         kind: "Service"
-        name: "nagios-poc"
+        name: "nagios"
       tls:
         termination: "edge"
         insecureEdgeTerminationPolicy: "Allow"
@@ -47,13 +47,13 @@ objects:
     metadata:
       labels:
         provider: "rhmap"
-        component: "nagios-poc"
-      name: "nagios-poc"
+        component: "nagios"
+      name: "nagios"
     spec:
       replicas: 1
       selector:
         provider: "rhmap"
-        component: "nagios-poc"
+        component: "nagios"
       triggers:
       - type: ConfigChange
       strategy:
@@ -67,10 +67,10 @@ objects:
         metadata:
           labels:
             provider: "rhmap"
-            component: "nagios-poc"
+            component: "nagios"
         spec:
           containers:
-          - name: "nagios-poc"
+          - name: "nagios"
             image: "davidmartin/nagios-poc"
             ports:
               - containerPort: 8080
@@ -122,7 +122,7 @@ parameters:
 -
   description: "From email address for alerts"
   name: "SMTP_FROM_ADDRESS"
-  value: "aaaaaa@example.com"
+  value: "admin@example.com"
 -
   description: "To email address for alerts"
   name: "MBAAS_ADMIN_EMAIL"
