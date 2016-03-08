@@ -60,12 +60,18 @@ objects:
         spec:
           containers:
           - name: "nagios-poc"
-            image: "rhmap/nagios-poc"
+            image: "davidmartin/nagios-poc"
             ports:
               - containerPort: 8080
             env:
             - name: "SMTP_SERVER"
               value: "${SMTP_SERVER}"
+            - name: "SMTP_USERNAME"
+              value: "${SMTP_USERNAME}"
+            - name: "SMTP_PASSWORD"
+              value: "${SMTP_PASSWORD}"
+            - name: "SMTP_TLS"
+              value: "${SMTP_TLS}"
             - name: "SMTP_FROM_ADDRESS"
               value: "${SMTP_FROM_ADDRESS}"
             - name: "MBAAS_ADMIN_EMAIL"
@@ -86,6 +92,18 @@ parameters:
   description: "SMTP server address to use for sending alert emails e.g. 1.2.3.4:25"
   name: "SMTP_SERVER"
   value: "localhost"
+-
+  description: "SMTP username"
+  name: "SMTP_USERNAME"
+  required: true
+-
+  description: "SMTP password"
+  name: "SMTP_PASSWORD"
+  required: true
+-
+  description: "Use TLS for message delivery (auto|yes|no)"
+  name: "SMTP_TLS"
+  value: "auto"
 -
   description: "From email address for alerts"
   name: "SMTP_FROM_ADDRESS"
