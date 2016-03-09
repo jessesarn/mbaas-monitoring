@@ -1,0 +1,22 @@
+sudo: required
+
+language: bash
+
+services:
+- docker
+
+before_install:
+- export DOCKER_REGISTRY=https://index.docker.io/v1/
+- docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USER" -p="$DOCKER_PASS" "$DOCKER_REGISTRY"
+- export REPO=docker.io/rhmap/nagios
+- export VERSION=4.0.8
+- export BUILD=2
+- docker build -f Dockerfile -t "$REPO:$VERSION-$BUILD" .
+
+after_success:
+- export TAG=latest
+- docker tag "$REPO:$VERSION-$BUILD" $REPO:$TAG
+- docker push "$REPO:$VERSION-$BUILD"
+- docker push $REPO:$TAG
+- docker rmi "$REPO:$VERSION-$BUILD"
+- docker rmi $REPO:$TAG
