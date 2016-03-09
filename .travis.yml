@@ -1,0 +1,27 @@
+sudo: required
+language: bash
+
+services:
+- docker
+
+env:
+  global:
+  - secure: SZDiwPHnnBTNqC8X0GpLx1alLXVafve+Y0B1kux6qQBxy+pHedTIiCtu1PMbORCTENO8047e78oxWy19/r3SzROV0CdOKRWQVur+juP9VRdTLpU0Sm6GKCiPRIWvh+WHrqobZGYLgoEMPXiqQtN/5hLUXOkcjE7R7W+Qlv1SKlDsH2wzz48+ePvvhrN0nw1++pNIBC+j/bUAgR+zQRsLwNOYv6sphaYMhuWDH8qTDlDQyykh7Qw70yBf0ZsD0IQuZv9Sm6QMKJNnqzH3vpaxDaYFiS8NfNrP5ohrk4NNui5Y1bylec9mk8MlWdqX0gM88ipS88FpLQ/Rixs0cbY9emrKywGZvQDYHxy9GYrQyIseEEfchjDHvz1KBHRurjdDyidWvApCS3AWHjQAZ7pokj+qgt4StibOyUYZsl9C+BaO0V4u8mxmzNwPSAuYj7HGx5d0vlFsB7yS/iWXZ+/NdfYNsLT0jVWHbmbi7YLqMW38rM/umRiDDcGNuEO0YhQihqPQtIPXlATQ5sBa+KkjqjRMedVq+4krgfaHi5UzunaHXWovRLqtxasNvTBFjI8MR80K+4qmdIV9rhgz2Fi+ZPaxYBft31oNNzZGDWKUPc0YYHtacFkYnDc2/rT2ykmib8u+Xmsjp81P/HUrjNtVCCXEp/1uas9h6Op/sHMZEPQ=
+  - secure: XdbcHzmdaPM5ToRA/a+53ObNRRCMHxQUNaqgL2EqPSoZ4E7gHv72t/GZ8zEBIeHF4n9bpWBpTJG9+Ebu25ntg7lJ3nbc1RJYDX6YvhnndoIuOoT+/Fn78i2SvplaHvgV/eTW43HmlfGSmjLlYBbX2IZCRxBzGslubbdgq9Qs7sjN8fiewbZe8FteBJuNmveY9fDp6cNpp0qZ8bvcYLwAk/axyvk9VEdlrDjGnsuEK2vt/pqLKMUlfOTqILHFA57Zw5uBTZZ0vZBI3JUmFHbEHxZeJDe/TlVHcxitunx9NAhgmbO1psCSacA/wg9WEZFddYITmF1O0NOupA06uGCGovuHCtVWzSAjbyO74RrAReHaTb/B+dNebPXOnjy5PzPLiqTp0xRtVj9H005MNNYFz/Mub2gIzJdBpxqwFfFaKO//3JUYisqeVJ0hAnlDSybHsrMkS9hJtspCzx2JLtnhdxNMyIfjXdm/kOxkx0WClQaEHvx5R1nWzhxyhWn8f5l1PKu8OQECxbke7tua8DQYFT7sak7HpxfVL+2GsaMjmVOme7TBnBadu4QV/JCqw2bMg1scEzELz2b3FJnq+KIx5TJrSZDW2skmlCIIyn3gSLF2GD+VtT4da/pAM9lRTtZDS9SJFZLi7LR18Muhm7dzJddhfxVywEnagk9PDHMoJL0=
+  - secure: gkcikj5ldw7KEYMzeoE5e2A+9wyWrGvAun/x4qTssltEt+w5GdyAePz9ielXkYDrTBJOZjeHUTCtLow8LlVN2TwaIR/ALW+FAT9KMWlYN8lUdStahsiLIhy+288fXNZnFFh82h9NcjQ8hMZe1BHo+QSGd03t5OMOFtqxB/HxpLxIi9oLqy/t+AAELfrqm88oWe2DfLJ9Qwcw/xXlFpG+fABwspLrqNZvxsKMKqYV7Cy1gjAKScDCwyJ3TMFAAvsanO/EOpTz5m3W+GMlR5Jp2xJutVsw7e5hqtSf6ilUcaSEUvKDbbTvWzzLmK8VygQ6hlfFPdBUFYeg93J78rSJ+09CtN6K6pG6/lPFuU1xhoiJvMjX8HjHLKvE0Rur3vJvgYuUpsrbRUTUmB4Fsm4lJCwJcK7sn4NtY8Op6Ax5IXnsuGbzKuEqHDDqpyRSH3mJ8i8TyDbwPQV0OaMrJlaogrji8kVJjxB+LAF5NAiZ3OTx8zwPucT2I8Yu147C73ZQdGnagsWTJG7lfOgU539s8H+djXh1O834Cx+Y/zambwHPLsqbaWq3ZIHhL0cVw+83bY6afHyN8invibdV2oEDPzJTIsBd7V5yry7MNeJysire5B5GJn2aErK1i4r0SwM965YAHbhYWedbBQG7lrvED8UFCWhBjxKXfVgHFRSa2js=
+
+before_install:
+- export DOCKER_REGISTRY=https://index.docker.io/v1/
+- docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USER" -p="$DOCKER_PASS"  "$DOCKER_REGISTRY"
+- export REPO=docker.io/rhmap/nagios
+- export VERSION=4.0.8
+- export BUILD=2
+- docker build -f Dockerfile -t "$REPO:$VERSION-$BUILD" .
+
+after_success:
+- export TAG=latest
+- docker tag "$REPO:$VERSION-$BUILD" $REPO:$TAG
+- docker push "$REPO:$VERSION-$BUILD"
+- docker push $REPO:$TAG
+- docker rmi "$REPO:$VERSION-$BUILD"
+- docker rmi $REPO:$TAG
