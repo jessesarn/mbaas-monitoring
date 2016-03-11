@@ -23,7 +23,7 @@ RUN yum install -y epel-release && \
     mkdir -p /var/log/nagios/rw/ && \
     mkdir -p /var/log/nagios/spool && \
     mkdir -p /var/log/nagios/spool/checkresults && \
-    chmod -R 775 /supervisord.log /supervisord.pid /var/log/nagios \
+    chmod -R 777 /supervisord.log /supervisord.pid /var/log/nagios \
                     /etc/httpd /etc/passwd /var/log /etc/nagios /usr/lib64/nagios /var/spool/nagios /run /usr/share/httpd /usr/share/nagios && \
     sed -i -e 's|cfg_file=/etc/nagios/objects/localhost.cfg||' /etc/nagios/nagios.cfg
 
