@@ -17,6 +17,8 @@ RUN yum install -y epel-release && \
                                            perl-IO-Socket-SSL && \
     yum clean all && \
     mkdir -p /opt/rhmap/ && \
+    mkdir -p /var/log/nagios/spool && \
+    mkdir -p /var/log/nagios/spool/checkresults && \
     sed -i -e 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf && \
     sed -i -e 's|DocumentRoot "/var/www/html"|DocumentRoot "/usr/share/nagios/html"|' -e 's|<Directory "/var/www">|<Directory "/usr/share/nagios/html">|' /etc/httpd/conf/httpd.conf && \
     touch /supervisord.log supervisord.pid && \
