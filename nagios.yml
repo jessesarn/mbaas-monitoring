@@ -71,7 +71,7 @@ objects:
         spec:
           containers:
           - name: "nagios"
-            image: "davidmartin/nagios-poc"
+            image: "docker.io/rhmap/nagios:4.0.8-2"
             ports:
               - containerPort: 8080
             env:
