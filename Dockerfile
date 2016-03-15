@@ -21,9 +21,8 @@ RUN yum install -y epel-release && \
     sed -i -e 's|DocumentRoot "/var/www/html"|DocumentRoot "/usr/share/nagios/html"|' -e 's|<Directory "/var/www">|<Directory "/usr/share/nagios/html">|' /etc/httpd/conf/httpd.conf && \
     touch /supervisord.log supervisord.pid && \
     mkdir -p /var/log/nagios/rw/ && \
-    mkdir -p /var/log/nagios/spool && \
     mkdir -p /var/log/nagios/spool/checkresults && \
-    chmod -R 777 /supervisord.log /supervisord.pid /var/log/nagios \
+    chmod -R og+rwX /supervisord.log /supervisord.pid /var/log/nagios \
                     /etc/httpd /etc/passwd /var/log /etc/nagios /usr/lib64/nagios /var/spool/nagios /run /usr/share/httpd /usr/share/nagios && \
     sed -i -e 's|cfg_file=/etc/nagios/objects/localhost.cfg||' /etc/nagios/nagios.cfg
 
