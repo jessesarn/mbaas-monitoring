@@ -91,6 +91,8 @@ objects:
               value: "${NAGIOS_USER}"
             - name: "NAGIOS_PASSWORD"
               value: "${NAGIOS_PASSWORD}"
+            - name: "MBAAS_ROUTER_DNS"
+              value: "${MBAAS_ROUTER_DNS}"
             volumeMounts:
               - mountPath: "/var/log/nagios"
                 name: "nagios-data-volume"
@@ -136,3 +138,7 @@ parameters:
   name: "NAGIOS_PASSWORD"
   generate: "expression"
   from: "[a-zA-Z0-9]{10}"
+-
+  description: "Host or Service name for the MBaaS"
+  name: "MBAAS_ROUTER_DNS"
+  value: "fh-mbaas-service"
