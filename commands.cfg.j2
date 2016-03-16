@@ -1,9 +1,9 @@
 define command{
         command_name notify-host-by-email
-        command_line /usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\nHost: $HOSTNAME$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\n\nDate/Time: $LONGDATETIME$\n" | /usr/local/bin/sendEmail -o tls={{ smtp_tls }} -f {{ smtp_from_address }} -s {{ smtp_server }} -xu {{ smtp_username }} -xp {{ smtp_password }} -u "** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" -t $CONTACTEMAIL$
+        command_line /usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\nHost: $HOSTNAME$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\n\nDate/Time: $LONGDATETIME$\n" | /usr/bin/sendEmail -o tls={{ smtp_tls }} -f {{ smtp_from_address }} -s {{ smtp_server }} -xu {{ smtp_username }} -xp {{ smtp_password }} -u "** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" -t $CONTACTEMAIL$
 }
 
 define command{
         command_name notify-service-by-email
-        command_line /usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\n\nDate/Time: $LONGDATETIME$\n\nAdditional Info:\n\n$SERVICEOUTPUT$" | /usr/local/bin/sendEmail -o tls={{ smtp_tls }} -f {{ smtp_from_address }} -s {{ smtp_server }} -xu {{ smtp_username }} -xp {{ smtp_password }} -u "** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" -t $CONTACTEMAIL$
+        command_line /usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\n\nDate/Time: $LONGDATETIME$\n\nAdditional Info:\n\n$SERVICEOUTPUT$" | /usr/bin/sendEmail -o tls={{ smtp_tls }} -f {{ smtp_from_address }} -s {{ smtp_server }} -xu {{ smtp_username }} -xp {{ smtp_password }} -u "** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" -t $CONTACTEMAIL$
 }
