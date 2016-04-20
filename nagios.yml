@@ -71,7 +71,7 @@ objects:
         spec:
           containers:
           - name: "nagios"
-            image: "docker.io/rhmap/nagios:4.0.8-2"
+            image: "${NAGIOS_IMAGE_NAME}:${NAGIOS_IMAGE_VERSION}"
             ports:
               - containerPort: 8080
             env:
@@ -142,3 +142,11 @@ parameters:
   description: "Host or Service name for the MBaaS"
   name: "MBAAS_ROUTER_DNS"
   value: "fh-mbaas-service"
+-
+  description: "The name of the Nagios Docker image"
+  name: "NAGIOS_IMAGE_NAME"
+  value: "docker.io/rhmap/nagios"
+-
+  description: "The version of the Nagios Docker image"
+  name: "NAGIOS_IMAGE_VERSION"
+  value: "4.0.8-2"
