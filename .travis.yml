@@ -15,7 +15,7 @@ before_install:
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USER" -p="$DOCKER_PASS"  "$DOCKER_REGISTRY"
 - export REPO=docker.io/rhmap/nagios
 - export VERSION=4.0.8
-- export BUILD=2
+- export BUILD=3
 - docker build -f Dockerfile -t "$REPO:$VERSION-$BUILD" .
 
 after_success:
