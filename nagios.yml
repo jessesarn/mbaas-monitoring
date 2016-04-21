@@ -145,8 +145,8 @@ parameters:
 -
   description: "The name of the Nagios Docker image"
   name: "NAGIOS_IMAGE_NAME"
-  value: "docker.io/rhmap/nagios"
+  value: "rhmap4/nagios"
 -
   description: "The version of the Nagios Docker image"
   name: "NAGIOS_IMAGE_VERSION"
-  value: "4.0.8-2"
+  value: "4.0.8-6"
