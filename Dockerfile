@@ -38,6 +38,7 @@ ADD make-nagios-fhservices-cfg.py /opt/rhmap/make-nagios-fhservices-cfg.py
 ADD make-nagios-commands-cfg.py /opt/rhmap/make-nagios-commands-cfg.py
 ADD fhservices.cfg.j2 /opt/rhmap/fhservices.cfg.j2
 ADD commands.cfg.j2 /opt/rhmap/commands.cfg.j2
+ADD check_mongodb_wrapper.sh /opt/rhmap/check_mongodb_wrapper.sh
 
 ADD start.sh start.sh
 CMD ["./start.sh"]

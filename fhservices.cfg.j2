@@ -17,7 +17,7 @@ define command {
 
 define command {
   command_name   check_mongodb
-  command_line   $USER1$/nagios-plugin-mongodb/check_mongodb.py -A $ARG1$ -H $ARG2$ -P $ARG3$ -W $ARG4$ -C $ARG5$ -u $ARG6$ -p $ARG7$
+  command_line   /opt/rhmap/check_mongodb_wrapper.sh -A $ARG1$ -H $ARG2$ -P $ARG3$ -w $ARG4$ -c $ARG5$
 }
 
 define contact {
@@ -84,7 +84,7 @@ define service {
 define service {
        service_description mongodb-service::{{ mongochk }}
        hosts {{ mbaas_router_dns }}
-       check_command check_mongodb!{{ mongochk }}!mongodb-service!27017!0!0!{{ mongodb_admin_username }}!{{ mongodb_admin_password }}
+       check_command check_mongodb!{{ mongochk }}!mongodb-service!27017!0!0
        use generic-service
 
        notes This server failed to get a successful response from the {{ mongochk }} . Check that the mongo pods are running and replicating successfully.
