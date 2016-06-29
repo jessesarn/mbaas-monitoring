@@ -82,7 +82,7 @@ define service {
 
 {% for mongochk in ['connect','replset_state'] %}
 define service {
-       service_description mongodb-service::{{ mongochk | capfirst }}
+       service_description mongodb-service::{{ mongochk }}
        hosts {{ mbaas_router_dns }}
        check_command check_mongodb!{{ mongochk }}!mongodb-service!27017!0!0!{{ mongodb_admin_username }}!{{ mongodb_admin_password }}
        use generic-service
