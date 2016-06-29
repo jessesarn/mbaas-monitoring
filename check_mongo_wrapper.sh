@@ -51,6 +51,7 @@ TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
 
 MONGO_PASS=`curl -sSk -H "Authorization: Bearer $TOKEN" https://local.feedhenry.io:8443/api/v1/namespaces/dev-mbaas/pods?labelSelector=name=mongodb-replica | jq --raw-output '.items[0].spec.containers[].env[] | select(.name == "MONGODB_ADMIN_PASSWORD") | .value'`
 
-$USER1$/nagios-plugin-mongodb/check_mongodb.py -H $HOST -P $PORT -C $CRIT -W $WARN -A $ACTION -u admin -p $MONGO_PASS
+echo $USER1$ > /tmp/user1.log
+/usr/lib64/nagios/plugins/nagios-plugin-mongodb/check_mongodb.py -H $HOST -P $PORT -C $CRIT -W $WARN -A $ACTION -u admin -p $MONGO_PASS
 
 exit $?
