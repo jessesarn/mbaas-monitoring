@@ -31,7 +31,7 @@ RUN yum install -y epel-release && \
                     /etc/httpd /etc/passwd /var/log /etc/nagios /usr/lib64/nagios /var/spool/nagios /run /usr/share/httpd /usr/share/nagios && \
     sed -i -e 's|cfg_file=/etc/nagios/objects/localhost.cfg||' /etc/nagios/nagios.cfg && \
     cd /lib64/nagios/plugins/ && git clone git://github.com/mzupan/nagios-plugin-mongodb.git && cd && \
-    pip install pymongo
+    pip install pymongo request
     
 ADD supervisord.conf /etc/supervisord.conf
 ADD make-nagios-fhservices-cfg.py /opt/rhmap/make-nagios-fhservices-cfg.py
