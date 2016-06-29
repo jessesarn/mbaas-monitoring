@@ -31,10 +31,10 @@ usage() {
 
 WARN=0
 CRIT=0
-HOST=mongo-service
+HOST=mongodb-service
 PORT=27017
 ACTION=
-while getopts "hw:c:" OPTION
+while getopts "hwcPH:A:" OPTION
 do
  case $OPTION in
   h) usage; exit $NAGIOS_UNKNOWN ;;
