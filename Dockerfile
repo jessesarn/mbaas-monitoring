@@ -14,7 +14,11 @@ RUN yum install -y epel-release && \
                                            nagios-plugins-all \
                                            sendEmail \
                                            perl-Net-SSLeay \
-                                           perl-IO-Socket-SSL && \
+                                           perl-IO-Socket-SSL \
+                                           git \
+                                           python \
+                                           python-pip \
+                                           wget && \
     yum clean all && \
     mkdir -p /opt/rhmap/ && \
     sed -i -e 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf && \
@@ -25,8 +29,10 @@ RUN yum install -y epel-release && \
     mkdir -p /var/log/nagios/spool/checkresults && \
     chmod -R 777 /supervisord.log /supervisord.pid /var/log/nagios \
                     /etc/httpd /etc/passwd /var/log /etc/nagios /usr/lib64/nagios /var/spool/nagios /run /usr/share/httpd /usr/share/nagios && \
-    sed -i -e 's|cfg_file=/etc/nagios/objects/localhost.cfg||' /etc/nagios/nagios.cfg
-
+    sed -i -e 's|cfg_file=/etc/nagios/objects/localhost.cfg||' /etc/nagios/nagios.cfg && \
+    cd /lib64/nagios/plugins/ && git clone git://github.com/mzupan/nagios-plugin-mongodb.git && cd && \
+    pip install pymongo
+    
 ADD supervisord.conf /etc/supervisord.conf
 ADD make-nagios-fhservices-cfg.py /opt/rhmap/make-nagios-fhservices-cfg.py
 ADD make-nagios-commands-cfg.py /opt/rhmap/make-nagios-commands-cfg.py

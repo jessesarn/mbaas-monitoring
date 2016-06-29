@@ -15,6 +15,11 @@ define command {
        command_line   $USER1$/check_http -H $HOSTADDRESS$ -S
 }
 
+define command {
+  command_name   check_mongodb
+  command_line   $USER1$/nagios-plugin-mongodb/check_mongodb.py -A $ARG1$ -H $ARG2$ -P $ARG3$ -W $ARG4$ -C $ARG5$ -u $ARG6$ -p $ARG7$
+}
+
 define contact {
        contact_name   mbaasadmin
        use            generic-contact
@@ -71,6 +76,18 @@ define service {
        use generic-service
 
        notes This server failed to get a successful response from the {{ fhservice }} health endpoint. Check the response code & body and ensure the service and its dependencies are running and configured correctly.
+       contact_groups mbaasadmins
+}
+{% endfor %}
+
+{% for mongochk in ['connect','replset_state'] %}
+define service {
+       service_description mongodb-service::{{ mongochk | capfirst }}
+       hosts {{ mbaas_router_dns }}
+       check_command check_mongodb!{{ mongochk }}!mongodb-service!27017!0!0!{{ mongodb_admin_username }}!{{ mongodb_admin_password }}
+       use generic-service
+
+       notes This server failed to get a successful response from the {{ mongochk }} . Check that the mongo pods are running and replicating successfully.
        contact_groups mbaasadmins
 }
 {% endfor %}
