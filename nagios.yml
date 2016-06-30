@@ -30,17 +30,17 @@ objects:
       tls:
         termination: "edge"
         insecureEdgeTerminationPolicy: "Allow"
-  # -
-  #   apiVersion: "v1"
-  #   kind: "PersistentVolumeClaim"
-  #   metadata:
-  #     name: "nagios-claim-1"
-  #   spec:
-  #     accessModes:
-  #     - "ReadWriteOnce"
-  #     resources:
-  #       requests:
-  #         storage: "1Gi"
+  -
+    apiVersion: "v1"
+    kind: "PersistentVolumeClaim"
+    metadata:
+      name: "nagios-claim-1"
+    spec:
+      accessModes:
+      - "ReadWriteOnce"
+      resources:
+        requests:
+          storage: "1Gi"
   -
     apiVersion: "v1"
     kind: "DeploymentConfig"
@@ -93,13 +93,13 @@ objects:
               value: "${NAGIOS_PASSWORD}"
             - name: "MBAAS_ROUTER_DNS"
               value: "${MBAAS_ROUTER_DNS}"
-          #   volumeMounts:
-          #     - mountPath: "/var/log/nagios"
-          #       name: "nagios-data-volume"
-          # volumes:
-          # - name: "nagios-data-volume"
-          #   persistentVolumeClaim:
-          #     claimName: "nagios-claim-1"
+            volumeMounts:
+              - mountPath: "/var/log/nagios"
+                name: "nagios-data-volume"
+          volumes:
+          - name: "nagios-data-volume"
+            persistentVolumeClaim:
+              claimName: "nagios-claim-1"
 parameters:
 -
   description: "Nagios hostname to expose a route as"

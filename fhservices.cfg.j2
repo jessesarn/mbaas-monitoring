@@ -17,8 +17,13 @@ define command {
 
 define command {
   command_name   check_mongodb
-  command_line   /opt/rhmap/check_mongodb_wrapper.sh -A $ARG1$ -H $ARG2$ -P $ARG3$ -w $ARG4$ -c $ARG5$
+  command_line   /opt/rhmap/nagios/plugins/check_mongodb_wrapper.sh -A $ARG1$ -S $ARG2$ -w $ARG3$ -c $ARG4$
 }
+
+define command {
+  command_name   check_pod_disk_usage
+  command_line   /opt/rhmap/nagios/plugins/check_pod_disk_usage.sh -m $ARG1$ -w $ARG2$ -c $ARG3$
+}  
 
 define contact {
        contact_name   mbaasadmin
@@ -84,10 +89,22 @@ define service {
 define service {
        service_description mongodb-service::{{ mongochk }}
        hosts {{ mbaas_router_dns }}
-       check_command check_mongodb!{{ mongochk }}!mongodb-service!27017!0!0
+       check_command check_mongodb!{{ mongochk }}!mongodb-service!0!0
        use generic-service
 
        notes This server failed to get a successful response from the {{ mongochk }} . Check that the mongo pods are running and replicating successfully.
+       contact_groups mbaasadmins
+}
+{% endfor %}
+
+{% for chk in ['usage','inodes'] %}
+define service {
+       service_description Storage::Pod::Disk {{ chk }}
+       hosts {{ mbaas_router_dns }}
+       check_command check_pod_disk_usage!{{ chk }}!80!90
+       use generic-service
+
+       notes One or more pods have volumes which are running out of disk {{ chk }}.  You should clean up the files on this pod, if possible, or scale down/up the pod so that it has a fresh filesystem.
        contact_groups mbaasadmins
 }
 {% endfor %}
