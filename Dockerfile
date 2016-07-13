@@ -4,6 +4,9 @@ EXPOSE 8080
 
 ADD sendEmail-epel-7.repo /etc/yum.repos.d/
 
+RUN curl --retry 999 --retry-max-time 0 -sSL https://github.com/openshift/origin/releases/download/v1.2.0/openshift-origin-client-tools-v1.2.0-2e62fab-linux-64bit.tar.gz | tar xzv && \
+  mv openshift-origin-*/* /usr/bin/
+
 RUN curl -O https://storage.googleapis.com/kubernetes-release/release/v1.2.3/bin/linux/amd64/kubectl && \
   chmod +x kubectl && \
   mv kubectl /usr/bin/
